@@ -1,0 +1,509 @@
+/* Ambulance Locator - Modern Design */
+
+.ambulance-locator-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.locator-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Header */
+.locator-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.locator-header h1 {
+  font-size: 40px;
+  color: white;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.locator-header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Main Content */
+.locator-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Map Section */
+.map-section {
+  width: 100%;
+}
+
+.map-placeholder {
+  background: linear-gradient(135deg, #1a1f3a 0%, #0f1428 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.map-header h3 {
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.map-legend {
+  display: flex;
+  gap: 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.available {
+  background: #2ed573;
+  box-shadow: 0 0 8px rgba(46, 213, 115, 0.5);
+}
+
+.legend-dot.busy {
+  background: #808090;
+}
+
+.legend-dot.selected {
+  background: #ff4757;
+  box-shadow: 0 0 8px rgba(255, 71, 87, 0.5);
+}
+
+.map-area {
+  position: relative;
+}
+
+.map-svg {
+  width: 100%;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.map-info {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  margin: 16px 0 0 0;
+}
+
+/* Ambulances List */
+.ambulances-list-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ambulances-list-section h2 {
+  color: white;
+  font-size: 20px;
+  margin: 0 0 16px 0;
+  font-weight: 600;
+}
+
+.ambulances-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+/* Scrollbar styling */
+.ambulances-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ambulances-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.ambulances-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 71, 87, 0.3);
+  border-radius: 3px;
+}
+
+.ambulances-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 71, 87, 0.5);
+}
+
+/* Ambulance Card */
+.ambulance-card {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(15, 20, 40, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ambulance-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.ambulance-card:hover {
+  border-color: rgba(255, 71, 87, 0.3);
+  background: linear-gradient(135deg, rgba(26, 31, 58, 1) 0%, rgba(15, 20, 40, 1) 100%);
+  box-shadow: 0 8px 24px rgba(255, 71, 87, 0.2);
+  transform: translateY(-4px);
+}
+
+.ambulance-card:hover::before {
+  left: 100%;
+}
+
+.ambulance-card.busy {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ambulance-card.busy:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(15, 20, 40, 0.8) 100%);
+}
+
+.ambulance-card.selected {
+  border-color: #ff4757;
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 71, 87, 0.05) 100%);
+  box-shadow: 0 8px 32px rgba(255, 71, 87, 0.3);
+}
+
+/* Ambulance Header */
+.ambulance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.plate-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.license-plate {
+  background: linear-gradient(135deg, #ffeb3b 0%, #fdd835 100%);
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(255, 235, 59, 0.3);
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.available {
+  background: rgba(46, 213, 115, 0.2);
+  color: #26de81;
+  border: 1px solid rgba(46, 213, 115, 0.4);
+}
+
+.status-badge.busy {
+  background: rgba(128, 128, 144, 0.2);
+  color: #a0a0b0;
+  border: 1px solid rgba(128, 128, 144, 0.4);
+}
+
+.distance {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Ambulance Details */
+.ambulance-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.detail-row .label {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.detail-row .value {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* Ambulance Action */
+.ambulance-action {
+  display: flex;
+  gap: 12px;
+}
+
+.request-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
+
+.request-btn:hover:not(.disabled) {
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+  transform: translateY(-2px);
+}
+
+.request-btn:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+.request-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #808090 0%, #707080 100%);
+  box-shadow: none;
+}
+
+.loading-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 149, 0, 0.2);
+  border-radius: 10px;
+  color: #ff9500;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 149, 0, 0.3);
+  border-top-color: #ff9500;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg) }
+}
+
+/* Selected Indicator */
+.selected-indicator {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #ff4757 0%, #ff3838 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+}
+
+/* Back Button */
+.back-btn {
+  align-self: flex-start;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, rgba(26, 31, 58, 1) 0%, rgba(15, 20, 40, 1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+  border-color: rgba(255, 71, 87, 0.3);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.2);
+}
+
+.back-btn:active {
+  transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .locator-content {
+    grid-template-columns: 1fr;
+  }
+
+  .map-area {
+    height: 250px;
+  }
+
+  .ambulances-list {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .locator-container {
+    gap: 24px;
+  }
+
+  .locator-header h1 {
+    font-size: 32px;
+  }
+
+  .ambulance-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ambulance-card {
+    padding: 16px;
+  }
+
+  .map-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .map-legend {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .license-plate {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .locator-header h1 {
+    font-size: 24px;
+  }
+
+  .locator-header p {
+    font-size: 14px;
+  }
+
+  .ambulance-card {
+    padding: 14px;
+  }
+
+  .ambulance-header {
+    gap: 8px;
+  }
+
+  .plate-section {
+    gap: 8px;
+  }
+
+  .license-plate {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .request-btn {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+
+  .loading-state {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+
+  .back-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .detail-row {
+    font-size: 12px;
+  }
+}
